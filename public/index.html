@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./node_modules/js-cookie/dist/js.cookie.min.js"></script>
+    <link href="css/style.css" rel="stylesheet" />    
+    <title>Login - BRDSOFT</title>
+  </head>
+  <body>
+    <header></header>
+    <section>
+      <div class="box">
+        <div class="form">
+          <form>
+            <div class="image">
+              <img
+                src="https://sitezindocarlos.vercel.app/image/logo-azul-com-texto.png"
+                alt="BRDSOFT"
+              />
+            </div>
+            <div class="input" id="email" name="email">
+              <input type="text" id="emailValue" name="email" required />
+              <label for="email">E-mail</label>
+            </div>
+            <div class="input" id="password" name="password">
+              <input
+                type="password"
+                id="passwordValue"
+                name="password"
+                required
+              />
+              <label for="password">Senha</label>
+            </div>
+            <input
+              class="button"
+              type="button"
+              value="Log in"
+              onclick="getDataLogin()"
+            />
+            <div class="forgot">
+              <p>Esqueceu a <a href="#">senha?</a></p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+    <footer></footer>
+    <script type="module" src="auth.js"></script>
+    <script>
+      function getDataLogin() {
+        email = document.getElementById("emailValue").value;
+        password = document.getElementById("passwordValue").value;
+
+        const login = {
+          email: email,
+          password: password,
+        };
+
+        fetch("/auth", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(login),
+        })
+          .then((response) => {
+            if (response.status === 200) {
+              response.json().then((data) => {
+                localStorage.setItem("token", data.token); // Armazena o token no localStorage
+                window.location.href = "/"; // Redireciona para a rota /map
+              });
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    </script>
+  </body>
+</html>
